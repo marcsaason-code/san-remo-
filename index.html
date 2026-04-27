@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>San Remo Pizzaria e Restaurante</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:wght@300;400;500;600;700&display=swap"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f0f4ff;--fg:#0a0e2a;--muted:#4a5280;--border:#c5ceee;--card:#fff;
+  --accent:#1a1fd4;--accent-fg:#fff;--cream:#e8edf8;--charcoal:#0d1240;
+  --font-display:'Playfair Display',serif;--font-body:'Inter',sans-serif;
+  --admin-bg:#e8edf8;--admin-sidebar:#0d1240;--admin-accent:#1a1fd4;
+}
+body{font-family:var(--font-body);background:var(--bg);color:var(--fg);min-height:100vh;display:flex;flex-direction:column}
+a{color:inherit;text-decoration:none}img{display:block;max-width:100%}button{cursor:pointer;font-family:inherit;border:none;background:none}
+input,select,textarea{font-family:inherit}
+
+/* ---- HEADER ---- */
+header{position:sticky;top:0;z-index:40;border-bottom:1px solid rgba(255,255,255,.1);background:#0d1240;backdrop-filter:blur(12px)}
+.header-inner{max-width:1280px;margin:0 auto;padding:0 1.25rem;height:5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.logo{display:flex;align-items:center;gap:.75rem;transition:opacity .2s}.logo:hover{opacity:.8}
+.logo-box{width:3rem;height:3rem;border-radius:.375rem;background:#0d1240;display:flex;align-items:center;justify-content:position;font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:#fff;overflow:hidden}
+.logo-text{display:flex;flex-direction:column;line-height:1.2}
+.logo-name{font-family:var(--font-display);font-size:1.125rem;font-weight:600;letter-spacing:-.02em;color:#fff}
+.logo-sub{font-size:.625rem;text-transform:uppercase;letter-spacing:.18em;color:rgba(255,255,255,.55)}
+nav{display:flex;align-items:center;gap:2rem}
+nav a{font-size:.875rem;font-weight:500;color:rgba(255,255,255,.7);transition:color .2s}
+nav a:hover,nav a.active{color:#fff}
+.btn-cart{display:inline-flex;align-items:center;gap:.5rem;border-radius:9999px;background:var(--accent);padding:.5rem 1rem;font-size:.875rem;font-weight:500;color:#fff;transition:all .2s}
+.btn-cart:hover{background:rgba(200,56,42,.9)}
+.header-actions{display:flex;align-items:center;gap:.5rem}
+.badge-open{display:inline-flex;align-items:center;gap:.5rem;border-radius:9999px;padding:.375rem .75rem;font-size:.75rem;font-weight:500;transition:all .4s}
+.dot{width:.375rem;height:.375rem;border-radius:50%;transition:background .4s}
+@media(max-width:768px){nav{display:none}.logo-text{display:none}.badge-open{display:none}}
+
+/* ---- PAGES ---- */
+.page{display:none}.page.active{display:block}
+.section-label{font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.2em;color:var(--accent)}
+.section-title{margin-top:.75rem;font-family:var(--font-display);font-size:2.5rem;font-weight:600;letter-spacing:-.02em}
+@media(min-width:640px){.section-title{font-size:3rem}}
+.container{max-width:1280px;margin:0 auto;padding:0 1.25rem}
+@media(min-width:1024px){.container{padding:0 2rem}}
+
+/* ---- CARDS ---- */
+.card{border-radius:1rem;border:1px solid var(--border);background:var(--card);overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .3s}
+.card:hover{box-shadow:0 8px 30px rgba(26,26,26,.08)}
+.card-img{position:relative;aspect-ratio:4/3;overflow:hidden;background:#e5e2dc}
+.card-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}.card:hover .card-img img{transform:scale(1.03)}
+.card-body{padding:1.25rem;display:flex;flex-direction:column;flex:1}
+.card-title{font-family:var(--font-display);font-size:1.125rem;font-weight:600}
+.card-desc{margin-top:.375rem;font-size:.875rem;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-footer{margin-top:1rem;display:flex;align-items:flex-end;justify-content:space-between;gap:.75rem}
+.price-label{font-size:.6875rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.price{font-family:var(--font-display);font-size:1.25rem;font-weight:600}
+.price.promo{color:var(--accent)}.price-old{font-size:.875rem;color:var(--muted);text-decoration:line-through}
+.btn-add{width:2.5rem;height:2.5rem;border-radius:50%;background:var(--charcoal);color:#fff;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.btn-add:hover{background:var(--accent)}.btn-add:active{transform:scale(.9)}
+.badge-promo{position:absolute;left:.75rem;top:.75rem;border-radius:9999px;background:var(--accent);padding:.25rem .75rem;font-size:.625rem;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#fff}
+.grid-3{display:grid;gap:1.25rem}
+@media(min-width:640px){.grid-3{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1024px){.grid-3{grid-template-columns:repeat(3,1fr)}}
+
+/* ---- CARDÁPIO ---- */
+#cardapio{padding-bottom:5rem}
+.cardapio-header{padding:3rem 0 2rem;display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.cat-tabs{display:flex;gap:.5rem;overflow-x:auto;padding:.5rem 0;scrollbar-width:none}.cat-tabs::-webkit-scrollbar{display:none}
+.cat-tab{padding:.5rem 1.25rem;border-radius:9999px;font-size:.875rem;font-weight:500;border:1px solid var(--border);background:transparent;color:var(--fg);white-space:nowrap;transition:all .2s}
+.cat-tab.active,.cat-tab:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.cat-section{margin-top:2.5rem}
+.cat-section-title{font-family:var(--font-display);font-size:1.5rem;font-weight:600;margin-bottom:1.25rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
+.hidden{display:none!important}
+
+/* ---- INFO CARDS ---- */
+.info-card{border:1px solid var(--border);border-radius:1rem;padding:1.5rem;display:flex;align-items:flex-start;gap:1rem;margin-bottom:1rem;background:var(--card)}
+.info-icon{width:2.75rem;height:2.75rem;border-radius:50%;background:rgba(200,56,42,.1);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.info-card h3{font-weight:600;font-size:.9375rem;margin-bottom:.25rem}
+.info-card p,.info-card a{font-size:.875rem;color:var(--muted);line-height:1.6}
+.info-card a:hover{color:var(--accent)}
+
+/* ---- CART DRAWER ---- */
+.overlay{position:fixed;inset:0;z-index:49;background:rgba(26,26,26,.6);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .3s}
+.overlay.open{opacity:1;pointer-events:all}
+.cart-drawer{position:fixed;right:0;top:0;z-index:50;height:100%;width:100%;max-width:28rem;background:var(--bg);box-shadow:-4px 0 30px rgba(0,0,0,.1);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s ease-out}
+.cart-drawer.open{transform:translateX(0)}
+.cart-header{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.25rem 1rem;border-bottom:1px solid var(--border)}
+.cart-header h2{font-family:var(--font-display);font-size:1.25rem;font-weight:600}
+.cart-header p{font-size:.75rem;color:var(--muted)}
+.btn-close-cart{width:2.25rem;height:2.25rem;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);transition:background .2s}
+.btn-close-cart:hover{background:var(--cream)}
+.cart-body{flex:1;overflow-y:auto;padding:1.25rem}
+.cart-empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:1rem}
+.cart-empty-icon{width:4rem;height:4rem;border-radius:50%;background:var(--cream);display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.cart-empty h3{font-family:var(--font-display);font-size:1.125rem}
+.cart-empty p{font-size:.875rem;color:var(--muted)}
+.btn-go-cardapio{padding:.625rem 1.25rem;border-radius:9999px;background:var(--accent);color:#fff;font-size:.875rem;font-weight:600;transition:all .2s}
+.cart-item{display:flex;gap:1rem;padding:.875rem 0;border-bottom:1px solid var(--border)}
+.cart-item-img{width:4rem;height:4rem;border-radius:.75rem;overflow:hidden;flex-shrink:0;background:var(--cream)}
+.cart-item-img img{width:100%;height:100%;object-fit:cover}
+.cart-item-info{flex:1}.cart-item-name{font-weight:600;font-size:.9375rem}
+.cart-item-price{font-size:.875rem;color:var(--muted);margin-top:.125rem}
+.cart-item-controls{display:flex;align-items:center;gap:.5rem;margin-top:.5rem}
+.qty-btn{width:1.75rem;height:1.75rem;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;transition:all .2s;font-size:1rem;line-height:1}
+.qty-btn:hover{border-color:var(--accent);color:var(--accent)}
+.qty-num{font-size:.9375rem;font-weight:600;min-width:1.5rem;text-align:center}
+.cart-footer{padding:1rem 1.25rem 1.5rem;border-top:1px solid var(--border)}
+.cart-subtotal{display:flex;justify-content:space-between;font-size:.9375rem;margin-bottom:.5rem}
+.cart-subtotal.total{font-weight:700;font-size:1.0625rem;padding-top:.5rem;border-top:1px solid var(--border);margin-top:.5rem}
+.btn-checkout{width:100%;padding:.875rem;border-radius:9999px;background:var(--accent);color:#fff;font-size:.9375rem;font-weight:600;display:flex;align-items:center;justify-content:center;gap:.5rem;transition:all .2s;margin-top:1rem}
+.btn-checkout:hover{background:rgba(200,56,42,.9)}
+
+/* ---- PAYMENT MODAL ---- */
+.modal-backdrop{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .3s}
+.modal-backdrop.open{opacity:1;pointer-events:all}
+.modal{background:var(--bg);border-radius:1.5rem;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;padding:2rem;position:relative}
+.modal h2{font-family:var(--font-display);font-size:1.5rem;font-weight:600;margin-bottom:1.5rem}
+.modal-close{position:absolute;top:1rem;right:1rem;width:2rem;height:2rem;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:var(--cream)}
+.pay-options{display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.5rem}
+.pay-option{border:2px solid var(--border);border-radius:1rem;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;cursor:pointer;transition:all .2s}
+.pay-option:hover{border-color:var(--accent)}
+.pay-option.selected{border-color:var(--accent);background:rgba(200,56,42,.04)}
+.pay-option input[type=radio]{accent-color:var(--accent);width:1.1rem;height:1.1rem;flex-shrink:0}
+.pay-option-icon{width:2.5rem;height:2.5rem;border-radius:.75rem;background:var(--cream);display:flex;align-items:center;justify-content:center;color:var(--accent);flex-shrink:0;font-size:1.25rem}
+.pay-option-info h4{font-weight:600;font-size:.9375rem}
+.pay-option-info p{font-size:.8125rem;color:var(--muted)}
+.pay-detail{background:var(--cream);border-radius:1rem;padding:1.25rem;margin-bottom:1.25rem;display:none}
+.pay-detail.show{display:block}
+.pix-key{display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid var(--border);border-radius:.75rem;padding:.75rem 1rem;margin-top:.75rem}
+.pix-key span{font-size:.9375rem;font-weight:600;letter-spacing:.05em}
+.btn-copy{padding:.375rem .875rem;border-radius:9999px;background:var(--accent);color:#fff;font-size:.75rem;font-weight:600;transition:all .2s}
+.btn-copy:hover{background:rgba(200,56,42,.85)}
+.card-fields{display:grid;gap:.75rem;margin-top:.75rem}
+.card-fields input{width:100%;padding:.625rem .875rem;border:1px solid var(--border);border-radius:.75rem;font-size:.875rem;background:#fff;outline:none;transition:border-color .2s}
+.card-fields input:focus{border-color:var(--accent)}
+.card-fields .row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.address-fields{display:grid;gap:.75rem;margin-bottom:1.25rem}
+.address-fields input{width:100%;padding:.625rem .875rem;border:1px solid var(--border);border-radius:.75rem;font-size:.875rem;background:#fff;outline:none;transition:border-color .2s}
+.address-fields input:focus{border-color:var(--accent)}
+.address-fields label{font-size:.8125rem;font-weight:500;margin-bottom:.25rem;display:block}
+.address-fields .af-group{display:flex;flex-direction:column}
+.btn-confirm{width:100%;padding:.875rem;border-radius:9999px;background:var(--accent);color:#fff;font-size:.9375rem;font-weight:600;transition:all .2s}
+.btn-confirm:hover{background:rgba(200,56,42,.9)}
+.modal-section-label{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:.75rem}
+
+/* ---- TOAST ---- */
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(2rem);background:var(--charcoal);color:#fff;padding:.75rem 1.5rem;border-radius:9999px;font-size:.875rem;font-weight:500;opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ---- FOOTER ---- */
+footer{background:var(--charcoal);color:#fff;margin-top:auto}
+.footer-inner{max-width:1280px;margin:0 auto;padding:4rem 1.25rem 0;display:grid;gap:2.5rem}
+@media(min-width:1024px){.footer-inner{grid-template-columns:2fr 1fr 1fr;padding:4rem 2rem 0}}
+.footer-brand p.tagline{margin-top:1rem;font-size:.875rem;color:rgba(255,255,255,.6);max-width:340px;line-height:1.6}
+.footer-social{display:flex;align-items:center;gap:.75rem;margin-top:1.5rem}
+.social-btn{display:inline-flex;width:2.5rem;height:2.5rem;align-items:center;justify-content:center;border-radius:50%;border:1px solid rgba(255,255,255,.2);transition:background .2s}
+.social-btn:hover{background:rgba(255,255,255,.1)}
+.footer-col h4{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.2em;color:rgba(255,255,255,.5);margin-bottom:.75rem}
+.footer-col p,.footer-col a{font-size:.875rem;color:rgba(255,255,255,.75);display:flex;align-items:flex-start;gap:.5rem;margin-bottom:.75rem;line-height:1.5}
+.footer-col a:hover{color:var(--accent)}
+.footer-col ul{list-style:none}.footer-col ul li{margin-bottom:.5rem}
+.footer-bottom{max-width:1280px;margin:0 auto;padding:1.5rem 1.25rem;border-top:1px solid rgba(255,255,255,.1);display:flex;flex-wrap:wrap;gap:.5rem;justify-content:space-between;font-size:.75rem;color:rgba(255,255,255,.4)}
+
+/* ========== ADMIN ========== */
+#page-admin{background:var(--admin-bg);min-height:100vh;display:none}
+#page-admin.active{display:flex;flex-direction:column}
+.admin-login{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem}
+.admin-login-box{background:#fff;border-radius:1.5rem;padding:2.5rem;width:100%;max-width:380px;box-shadow:0 4px 30px rgba(0,0,0,.08)}
+.admin-login-box h2{font-family:var(--font-display);font-size:1.75rem;font-weight:600;margin-bottom:.5rem}
+.admin-login-box p{color:var(--muted);font-size:.875rem;margin-bottom:1.75rem}
+.admin-field{margin-bottom:1rem}
+.admin-field label{display:block;font-size:.8125rem;font-weight:500;margin-bottom:.4rem}
+.admin-field input{width:100%;padding:.7rem 1rem;border:1px solid var(--border);border-radius:.75rem;font-size:.9375rem;outline:none;transition:border-color .2s}
+.admin-field input:focus{border-color:var(--admin-accent)}
+.btn-admin-login{width:100%;padding:.875rem;border-radius:.75rem;background:var(--admin-accent);color:#fff;font-size:.9375rem;font-weight:600;transition:all .2s;margin-top:.5rem}
+.btn-admin-login:hover{background:#3a58e0}
+.admin-err{color:#dc2626;font-size:.8125rem;margin-top:.5rem;display:none}
+
+/* ADMIN SHELL */
+.admin-shell{flex:1;display:none;min-height:100vh}
+.admin-shell.visible{display:flex}
+.admin-sidebar{width:220px;min-width:220px;background:var(--admin-sidebar);color:#fff;display:flex;flex-direction:column;flex-shrink:0;min-height:100vh;overflow:hidden}
+.admin-sidebar-logo{padding:1.5rem;border-bottom:1px solid rgba(255,255,255,.08);font-family:var(--font-display);font-size:1.1rem;font-weight:600}
+.admin-sidebar-logo span{display:block;font-size:.65rem;font-weight:400;opacity:.5;letter-spacing:.1em;text-transform:uppercase;margin-top:.25rem}
+.admin-nav{flex:1;padding:1rem 0;display:flex;flex-direction:column}
+.admin-nav-item{display:flex;flex-direction:row;align-items:center;gap:.75rem;padding:.75rem 1.25rem;font-size:.875rem;color:rgba(255,255,255,.65);cursor:pointer;transition:all .2s;border-left:3px solid transparent;white-space:nowrap;width:100%}.admin-nav-item:hover{color:#fff;background:rgba(255,255,255,.05)}
+.admin-nav-item.active{color:#fff;background:rgba(79,110,247,.15);border-left-color:var(--admin-accent)}
+.admin-nav-item svg{flex-shrink:0;opacity:.7;min-width:16px}
+.admin-nav-item.active svg{opacity:1}
+.admin-sidebar-footer{padding:1rem 1.25rem;border-top:1px solid rgba(255,255,255,.08)}
+.btn-logout{display:flex;align-items:center;gap:.5rem;font-size:.8125rem;color:rgba(255,255,255,.5);transition:color .2s;cursor:pointer}
+.btn-logout:hover{color:#fff}
+.admin-main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.admin-topbar{background:#fff;border-bottom:1px solid var(--border);padding:1rem 1.75rem;display:flex;align-items:center;justify-content:space-between}
+.admin-topbar h1{font-family:var(--font-display);font-size:1.375rem;font-weight:600}
+.admin-topbar p{font-size:.8125rem;color:var(--muted)}
+.admin-content{flex:1;padding:1.75rem;overflow-y:auto}
+.admin-section{display:none}.admin-section.active{display:block}
+
+/* ADMIN STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.25rem;margin-bottom:2rem}
+.stat-card{background:#fff;border-radius:1rem;padding:1.25rem 1.5rem;border:1px solid var(--border)}
+.stat-card .stat-icon{width:2.5rem;height:2.5rem;border-radius:.75rem;display:flex;align-items:center;justify-content:center;margin-bottom:1rem}
+.stat-card .stat-val{font-family:var(--font-display);font-size:1.75rem;font-weight:600}
+.stat-card .stat-lbl{font-size:.8125rem;color:var(--muted);margin-top:.25rem}
+
+/* ADMIN TABLE */
+.admin-table-wrap{background:#fff;border-radius:1rem;border:1px solid var(--border);overflow:hidden}
+.admin-table-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem}
+.admin-table-header h3{font-weight:600;font-size:1rem}
+.btn-admin{padding:.5rem 1.1rem;border-radius:.625rem;font-size:.875rem;font-weight:500;transition:all .2s;display:inline-flex;align-items:center;gap:.4rem}
+.btn-admin.primary{background:var(--admin-accent);color:#fff}.btn-admin.primary:hover{background:#3a58e0}
+.btn-admin.danger{background:#fee2e2;color:#dc2626}.btn-admin.danger:hover{background:#fecaca}
+.btn-admin.ghost{background:var(--admin-bg);border:1px solid var(--border);color:var(--fg)}.btn-admin.ghost:hover{border-color:var(--admin-accent)}
+table{width:100%;border-collapse:collapse;font-size:.875rem}
+th{padding:.875rem 1.25rem;text-align:left;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border-bottom:1px solid var(--border);background:var(--admin-bg)}
+td{padding:.875rem 1.25rem;border-bottom:1px solid var(--border);color:var(--fg)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(79,110,247,.02)}
+.tag{display:inline-flex;padding:.2rem .65rem;border-radius:9999px;font-size:.7rem;font-weight:600}
+.tag.green{background:#dcfce7;color:#15803d}
+.tag.red{background:#fee2e2;color:#dc2626}
+.tag.yellow{background:#fef9c3;color:#854d0e}
+.tag.blue{background:#dbeafe;color:#1d4ed8}
+.tag.gray{background:#f3f4f6;color:#6b7280}
+
+/* ADMIN MODAL */
+.admin-modal-backdrop{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .3s}
+.admin-modal-backdrop.open{opacity:1;pointer-events:all}
+.admin-modal{background:#fff;border-radius:1.25rem;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;padding:2rem;position:relative}
+.admin-modal h3{font-family:var(--font-display);font-size:1.35rem;font-weight:600;margin-bottom:1.5rem}
+.admin-modal .modal-close{position:absolute;top:1rem;right:1rem;width:2rem;height:2rem;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center}
+.admin-modal .modal-close:hover{background:var(--admin-bg)}
+.form-row{display:grid;gap:.875rem;margin-bottom:.875rem}
+.form-row.cols2{grid-template-columns:1fr 1fr}
+.form-group label{display:block;font-size:.8125rem;font-weight:500;margin-bottom:.35rem}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:.65rem .875rem;border:1px solid var(--border);border-radius:.75rem;font-size:.875rem;outline:none;transition:border-color .2s;background:#fff}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--admin-accent)}
+.form-group textarea{resize:vertical;min-height:80px}
+.form-actions{display:flex;gap:.75rem;justify-content:flex-end;margin-top:1.5rem}
+.switch{position:relative;display:inline-flex;align-items:center;gap:.625rem;cursor:pointer;font-size:.875rem}
+.switch input{position:absolute;opacity:0;width:0;height:0}
+.switch-track{width:2.5rem;height:1.375rem;border-radius:9999px;background:#d1d5db;transition:background .2s;flex-shrink:0;position:relative}
+.switch input:checked + .switch-track{background:var(--admin-accent)}
+.switch-track::after{content:'';position:absolute;top:.1875rem;left:.1875rem;width:1rem;height:1rem;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.switch input:checked + .switch-track::after{transform:translateX(1.125rem)}
+
+/* ORDERS */
+.order-card{background:#fff;border:1px solid var(--border);border-radius:1rem;padding:1.25rem;margin-bottom:1rem}
+.order-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem}
+.order-id{font-weight:700;font-size:.9375rem}
+.order-time{font-size:.8125rem;color:var(--muted)}
+.order-items{font-size:.875rem;color:var(--muted);margin-bottom:.75rem;line-height:1.7}
+.order-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+.order-total{font-weight:700;font-size:1rem}
+.order-pay{font-size:.8125rem;color:var(--muted)}
+.status-select{padding:.3rem .625rem;border-radius:.5rem;border:1px solid var(--border);font-size:.8125rem;outline:none;cursor:pointer}
+.pix-config{background:#fff;border:1px solid var(--border);border-radius:1rem;padding:1.5rem;margin-bottom:1.5rem}
+.pix-config h3{font-weight:600;margin-bottom:1rem}
+</style>
+</head>
+<body>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+
+<!-- CART DRAWER -->
+<aside class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <div><h2>Seu pedido</h2><p>Pedido mínimo: R$ 30,00</p></div>
+    <button class="btn-close-cart" onclick="closeCart()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <div class="cart-empty" id="cartEmpty">
+      <div class="cart-empty-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      </div>
+      <h3>Seu carrinho está vazio</h3>
+      <p>Explore o cardápio e monte seu pedido.</p>
+      <button class="btn-go-cardapio" onclick="navigate('sobre');closeCart()">Ver cardápio</button>
+    </div>
+    <div id="cartItems"></div>
+  </div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-subtotal"><span>Subtotal</span><span id="cartSubtotal">R$ 0,00</span></div>
+    <div class="cart-subtotal"><span>Entrega</span><span>R$ 8,00</span></div>
+    <div class="cart-subtotal total"><span>Total</span><span id="cartTotal">R$ 0,00</span></div>
+    <button class="btn-checkout" onclick="openPayment()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Finalizar pedido
+    </button>
+  </div>
+</aside>
+
+<!-- PAYMENT MODAL -->
+<div class="modal-backdrop" id="payModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closePayment()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+    <h2>Finalizar pedido</h2>
+
+    <p class="modal-section-label">Endereço de entrega</p>
+    <div class="address-fields">
+      <div class="af-group"><label>Rua e número</label><input type="text" id="addr-rua" placeholder="Ex: Rua das Flores, 42"/></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+        <div class="af-group"><label>Bairro</label><input type="text" id="addr-bairro" placeholder="Bairro"/></div>
+        <div class="af-group"><label>Complemento</label><input type="text" id="addr-comp" placeholder="Apto, bloco..."/></div>
+      </div>
+    </div>
+
+    <p class="modal-section-label">Forma de pagamento</p>
+    <div class="pay-options" id="payOptions">
+      <label class="pay-option" onclick="selectPay('pix',this)">
+        <input type="radio" name="pay" value="pix"/>
+        <div class="pay-option-icon">✦</div>
+        <div class="pay-option-info">
+          <h4>PIX</h4>
+          <p>Transferência instantânea</p>
+        </div>
+      </label>
+      <label class="pay-option" onclick="selectPay('debito',this)">
+        <input type="radio" name="pay" value="debito"/>
+        <div class="pay-option-icon">💳</div>
+        <div class="pay-option-info">
+          <h4>Cartão de Débito</h4>
+          <p>Pagar na entrega ou online</p>
+        </div>
+      </label>
+      <label class="pay-option" onclick="selectPay('credito',this)">
+        <input type="radio" name="pay" value="credito"/>
+        <div class="pay-option-icon">💳</div>
+        <div class="pay-option-info">
+          <h4>Cartão de Crédito</h4>
+          <p>Pagar na entrega ou online</p>
+        </div>
+      </label>
+    </div>
+
+    <!-- PIX detail -->
+    <div class="pay-detail" id="detail-pix">
+      <p style="font-size:.875rem;margin-bottom:.25rem"><strong>Chave PIX:</strong></p>
+      <div class="pix-key">
+        <span id="pixKeyDisplay">carregando...</span>
+        <button class="btn-copy" onclick="copyPix()">Copiar</button>
+      </div>
+      <p style="font-size:.8125rem;color:var(--muted);margin-top:.75rem">Após o pagamento, envie o comprovante pelo WhatsApp para confirmar seu pedido.</p>
+    </div>
+
+    <!-- Débito/Crédito detail -->
+    <div class="pay-detail" id="detail-card">
+      <div style="display:flex;gap:.75rem;margin-bottom:.75rem">
+        <label class="pay-option" style="flex:1;padding:.75rem" onclick="selectCardPay('entrega',this)">
+          <input type="radio" name="cardwhere" value="entrega"/>
+          <div class="pay-option-info"><h4 style="font-size:.875rem">Na entrega</h4><p>Maquininha na porta</p></div>
+        </label>
+        <label class="pay-option" style="flex:1;padding:.75rem" onclick="selectCardPay('online',this)">
+          <input type="radio" name="cardwhere" value="online"/>
+          <div class="pay-option-info"><h4 style="font-size:.875rem">Online agora</h4><p>Dados do cartão</p></div>
+        </label>
+      </div>
+      <div class="card-fields" id="cardFields" style="display:none">
+        <input type="text" placeholder="Número do cartão" maxlength="19" oninput="fmtCard(this)"/>
+        <input type="text" placeholder="Nome impresso no cartão"/>
+        <div class="row">
+          <input type="text" placeholder="Validade MM/AA" maxlength="5"/>
+          <input type="text" placeholder="CVV" maxlength="4"/>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-confirm" onclick="confirmOrder()">Confirmar pedido</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- PUBLIC HEADER (hidden in admin) -->
+<header id="publicHeader">
+  <div class="header-inner">
+    <a href="#" class="logo" onclick="navigate('cardapio')">
+      <div class="logo-box" style="background:transparent;padding:0"><img src="/images/logo.jpg" alt="San Remo" style="width:100%;height:100%;object-fit:contain;border-radius:.375rem"/></div>
+      <div class="logo-text">
+        <span class="logo-name">San Remo</span>
+        <span class="logo-sub">Pizzaria · Restaurante</span>
+      </div>
+    </a>
+    <nav id="mainNav">
+      <a href="#" onclick="navigate('cardapio')" data-page="cardapio">Cardápio</a>
+      <a href="#" onclick="navigate('sobre')" data-page="sobre">A casa</a>
+      <a href="#" onclick="navigate('contato')" data-page="contato">Contato</a>
+    </nav>
+    <div class="header-actions">
+      <span class="badge-open" id="statusBadge"><span class="dot" id="statusDot"></span><span id="statusText"></span></span>
+      <button class="btn-cart" onclick="openCart()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Carrinho <span id="cartCountBadge" style="background:rgba(255,255,255,.25);border-radius:9999px;padding:0 .4rem;font-size:.75rem;display:none"></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main style="flex:1" id="publicMain">
+
+<!-- CARDÁPIO -->
+<div class="page" id="page-cardapio">
+  <div class="container">
+    <div class="cardapio-header">
+      <div>
+        <p class="section-label">Nosso cardápio completo</p>
+        <h1 class="section-title">O que vai ser hoje?</h1>
+      </div>
+    </div>
+    <div class="cat-tabs">
+      <button class="cat-tab active" onclick="filterCat('todas',this)">Todas</button>
+      <button class="cat-tab" onclick="filterCat('pizzas-classicas',this)">Pizzas Clássicas</button>
+      <button class="cat-tab" onclick="filterCat('pizzas-especiais',this)">Pizzas Especiais</button>
+      <button class="cat-tab" onclick="filterCat('sobremesas',this)">Sobremesas</button>
+      <button class="cat-tab" onclick="filterCat('bebidas',this)">Bebidas</button>
+    </div>
+    <div id="cardapioContent">
+      <div class="cat-section" data-cat="pizzas-classicas"><h2 class="cat-section-title">Pizzas Clássicas</h2><div class="grid-3" id="grid-pizzas-classicas"></div></div>
+      <div class="cat-section" data-cat="pizzas-especiais"><h2 class="cat-section-title">Pizzas Especiais</h2><div class="grid-3" id="grid-pizzas-especiais"></div></div>
+      <div class="cat-section" data-cat="sobremesas"><h2 class="cat-section-title">Sobremesas</h2><div class="grid-3" id="grid-sobremesas"></div></div>
+      <div class="cat-section" data-cat="bebidas"><h2 class="cat-section-title">Bebidas</h2><div class="grid-3" id="grid-bebidas"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SOBRE -->
+<div class="page" id="page-sobre">
+  <div style="position:relative;color:#fff;overflow:hidden;min-height:100vh;display:flex;align-items:center;justify-content:center">
+    <!-- Imagem de fundo -->
+    <div style="position:absolute;inset:0;background-image:url('/images/hero-casa.jpg');background-size:cover;background-position:center;z-index:0"></div>
+    <!-- Overlay -->
+    <div style="position:absolute;inset:0;background:rgba(13,18,64,.55);z-index:1"></div>
+    <!-- Conteúdo centralizado -->
+    <div class="container" style="position:relative;z-index:2;text-align:center;padding-top:6rem;padding-bottom:6rem">
+      <p class="section-label" style="color:rgba(180,200,255,.9);justify-content:center;display:flex">Nossa história</p>
+      <h1 style="font-family:var(--font-display);font-size:3.25rem;font-weight:700;line-height:1.1;margin-top:.75rem;text-shadow:0 2px 20px rgba(0,0,0,.5)">San Remo Pizzaria e Restaurante.<br>Há + de 30 anos servindo qualidade.</h1>
+      <p style="margin-top:1.25rem;color:rgba(255,255,255,.85);max-width:640px;line-height:1.85;text-shadow:0 1px 8px rgba(0,0,0,.4);margin-left:auto;margin-right:auto">
+        Há mais de 30 anos servindo a cidade com receitas que atravessaram gerações, sempre com ingredientes selecionados e o calor do forno a lenha.<br><br>
+        Nossa missão é entregar sempre aos nossos clientes ao longo desses anos o verdadeiro sabor.<br><br>
+        Fundada em 1993, a San Remo nasceu do sonho de trazer a autenticidade das pizzarias italianas para a cidade de Suzano-SP. Nossa estrutura conta com um forno a lenha, proporcionando sabor tradicional às pizzas e a excelente qualidade da comida italiana.
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<!-- CONTATO -->
+<div class="page" id="page-contato">
+  <div style="position:relative;min-height:320px;display:flex;align-items:center;overflow:hidden">
+    <div style="position:absolute;inset:0;background-image:url('/images/local.jpg');background-size:cover;background-position:center;filter:brightness(.35)"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(13,18,64,.85) 40%,rgba(13,18,64,.3))"></div>
+    <div class="container" style="position:relative;z-index:1;padding-top:4rem;padding-bottom:4rem">
+      <p class="section-label" style="color:rgba(150,170,255,.9)">Fale com a gente</p>
+      <h1 style="font-family:var(--font-display);font-size:3rem;font-weight:600;margin-top:.75rem;color:#fff">Onde nos encontrar</h1>
+      <p style="margin-top:.75rem;color:rgba(255,255,255,.75);max-width:500px;line-height:1.7">Estamos sempre prontos para receber você — no salão ou pelo delivery.</p>
+    </div>
+  </div>
+  <div class="container">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.25rem;padding:2.5rem 0 5rem">
+      <div class="info-card" style="flex-direction:column;gap:.75rem;margin-bottom:0">
+        <div class="info-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div><p style="font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.5rem">Endereço</p><p style="font-size:.9375rem;font-weight:500;line-height:1.5">Rua das Oliveiras, 123 — Vila Bella, São Paulo/SP</p></div>
+      </div>
+      <div class="info-card" style="flex-direction:column;gap:.75rem;margin-bottom:0">
+        <div class="info-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div><p style="font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.5rem">Funcionamento</p><p style="font-size:.9375rem;font-weight:500;line-height:1.5">Ter a Dom — 18h às 23h30</p></div>
+      </div>
+      <div class="info-card" style="flex-direction:column;gap:.75rem;margin-bottom:0">
+        <div class="info-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+        <div><p style="font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.5rem">WhatsApp</p><p style="font-size:.9375rem;font-weight:500">+55 11983673876</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- FOOTER -->
+<footer id="publicFooter">
+  <div class="footer-inner">
+    <div>
+      <p style="font-family:var(--font-display);font-size:1.75rem">San Remo Pizzaria e Restaurante</p>
+      <p class="tagline">Pizzas artesanais com massa de fermentação natural, ingredientes selecionados e o sabor de uma cantina italiana de bairro.</p>
+      <div class="footer-social">
+        <a href="https://instagram.com" target="_blank" class="social-btn" aria-label="Instagram">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+        </a>
+        <a href="https://wa.me/5511983673876" target="_blank" class="social-btn" style="width:auto;padding:0 1rem;display:inline-flex;gap:.5rem;font-size:.875rem">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          WhatsApp
+        </a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Visite</h4>
+      <p><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;color:var(--accent)"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>Rua das Oliveiras, 123 — Vila Bella, SP</p>
+      <p><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;color:var(--accent)"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Ter a Dom — 18h às 23h30</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navegar</h4>
+      <ul>
+        <li><a href="#" onclick="navigate('cardapio')">Cardápio</a></li>
+        <li><a href="#" onclick="navigate('sobre')">A casa</a></li>
+        <li><a href="#" onclick="navigate('contato')">Contato</a></li>
+        <li><a href="#" onclick="navigate('admin')" style="color:rgba(255,255,255,.4)">Acesso administrativo</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 San Remo Pizzaria e Restaurante. Todos os direitos reservados.</p>
+    <p>Cardápio digital com pedidos via WhatsApp.</p>
+  </div>
+</footer>
+
+<!-- ==================== ADMIN ==================== -->
+<div class="page" id="page-admin" style="min-height:100vh;background:var(--admin-bg)">
+
+  <!-- LOGIN -->
+  <div class="admin-login" id="adminLogin">
+    <div class="admin-login-box">
+      <h2>Área Administrativa</h2>
+      <p>Acesso restrito à equipe San Remo.</p>
+      <div class="admin-field"><label>Usuário</label><input type="text" id="loginUser" placeholder="admin" value="admin"/></div>
+      <div class="admin-field"><label>Senha</label><input type="password" id="loginPass" placeholder="••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+      <p class="admin-err" id="loginErr">Usuário ou senha incorretos.</p>
+      <button class="btn-admin-login" onclick="doLogin()">Entrar</button>
+      <p style="font-size:.75rem;color:var(--muted);margin-top:1rem;text-align:center">Padrão: admin / admin123</p>
+    </div>
+  </div>
+
+  <!-- SHELL -->
+  <div class="admin-shell" id="adminShell">
+    <aside class="admin-sidebar">
+      <div class="admin-sidebar-logo">San Remo<span>Painel Administrativo</span></div>
+      <nav class="admin-nav">
+        <div class="admin-nav-item active" onclick="adminTab('dashboard',this)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+          Dashboard
+        </div>
+        <div class="admin-nav-item" onclick="adminTab('pedidos',this)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          Pedidos
+        </div>
+        <div class="admin-nav-item" onclick="adminTab('cardapio-admin',this)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+          Cardápio
+        </div>
+        <div class="admin-nav-item" onclick="adminTab('promocoes',this)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 14 4-4"/><circle cx="11" cy="11" r="1"/><circle cx="7" cy="7" r="1"/><path d="M20.2 7.8l-7.7 7.7-4-4 7.7-7.7c.9-.9 2.3-.9 3.2 0l.8.8c.9.9.9 2.3 0 3.2z"/><path d="m3.4 20.6 4-4"/></svg>
+          Promoções
+        </div>
+        <div class="admin-nav-item" onclick="adminTab('pagamentos-config',this)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/></svg>
+          Pagamentos
+        </div>
+        <div class="admin-nav-item" onclick="adminTab('configuracoes',this)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+          Configurações
+        </div>
+      </nav>
+      <div class="admin-sidebar-footer">
+        <button class="btn-logout" onclick="doLogout()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+          Sair
+        </button>
+      </div>
+    </aside>
+
+    <div class="admin-main">
+      <div class="admin-topbar">
+        <div><h1 id="adminTabTitle">Dashboard</h1><p id="adminTabSub">Visão geral do negócio</p></div>
+        <div style="font-size:.8125rem;color:var(--muted)">Olá, <strong>Admin</strong> 👋</div>
+      </div>
+      <div class="admin-content">
+
+        <!-- DASHBOARD -->
+        <div class="admin-section active" id="sec-dashboard">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon" style="background:#ede9fe;color:#7c3aed"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+              <div class="stat-val" id="dashTotalPedidos">0</div>
+              <div class="stat-lbl">Pedidos hoje</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background:#dcfce7;color:#16a34a"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" x2="12" y1="1" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+              <div class="stat-val" id="dashFaturamento">R$ 0</div>
+              <div class="stat-lbl">Faturamento hoje</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background:#fef9c3;color:#ca8a04"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+              <div class="stat-val" id="dashEmPreparo">0</div>
+              <div class="stat-lbl">Em preparo</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background:#dbeafe;color:#2563eb"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg></div>
+              <div class="stat-val" id="dashEntregas">0</div>
+              <div class="stat-lbl">Em entrega</div>
+            </div>
+          </div>
+          <div class="admin-table-wrap">
+            <div class="admin-table-header"><h3>Últimos pedidos</h3></div>
+            <table>
+              <thead><tr><th>Pedido</th><th>Cliente</th><th>Itens</th><th>Total</th><th>Pagamento</th><th>Status</th></tr></thead>
+              <tbody id="dashRecentOrders"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- PEDIDOS -->
+        <div class="admin-section" id="sec-pedidos">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:.75rem">
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+              <button class="cat-tab active" style="font-size:.8125rem;padding:.375rem 1rem" onclick="filterOrders('todos',this)">Todos</button>
+              <button class="cat-tab" style="font-size:.8125rem;padding:.375rem 1rem" onclick="filterOrders('pendente',this)">Pendentes</button>
+              <button class="cat-tab" style="font-size:.8125rem;padding:.375rem 1rem" onclick="filterOrders('preparo',this)">Em preparo</button>
+              <button class="cat-tab" style="font-size:.8125rem;padding:.375rem 1rem" onclick="filterOrders('entrega',this)">Em entrega</button>
+              <button class="cat-tab" style="font-size:.8125rem;padding:.375rem 1rem" onclick="filterOrders('entregue',this)">Entregues</button>
+            </div>
+          </div>
+          <div id="ordersList"></div>
+        </div>
+
+        <!-- CARDÁPIO ADMIN -->
+        <div class="admin-section" id="sec-cardapio-admin">
+          <div class="admin-table-wrap">
+            <div class="admin-table-header">
+              <h3>Itens do cardápio</h3>
+              <button class="btn-admin primary" onclick="openItemModal()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                Novo item
+              </button>
+            </div>
+            <table>
+              <thead><tr><th>Nome</th><th>Categoria</th><th>Preço</th><th>Status</th><th>Ações</th></tr></thead>
+              <tbody id="menuAdminTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- PROMOÇÕES -->
+        <div class="admin-section" id="sec-promocoes">
+          <div class="admin-table-wrap">
+            <div class="admin-table-header">
+              <h3>Promoções ativas</h3>
+              <button class="btn-admin primary" onclick="openPromoModal()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                Nova promoção
+              </button>
+            </div>
+            <table>
+              <thead><tr><th>Item</th><th>Preço original</th><th>Preço promo</th><th>Desconto</th><th>Status</th><th>Ações</th></tr></thead>
+              <tbody id="promoTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- PAGAMENTOS CONFIG -->
+        <div class="admin-section" id="sec-pagamentos-config">
+          <div class="pix-config">
+            <h3>Configurações de Pagamento</h3>
+            <div style="display:grid;gap:1.25rem">
+              <div>
+                <label style="font-size:.875rem;font-weight:600;display:block;margin-bottom:.5rem">Chave PIX</label>
+                <div style="display:flex;gap:.75rem">
+                  <input type="text" id="pixKeyInput" style="flex:1;padding:.65rem .875rem;border:1px solid var(--border);border-radius:.75rem;font-size:.875rem;outline:none" placeholder="CPF, CNPJ, e-mail ou chave aleatória"/>
+                  <button class="btn-admin primary" onclick="savePixKey()">Salvar</button>
+                </div>
+                <p style="font-size:.8125rem;color:var(--muted);margin-top:.5rem">Esta chave será exibida ao cliente no modal de pagamento via PIX.</p>
+              </div>
+              <div style="border-top:1px solid var(--border);padding-top:1.25rem">
+                <label style="font-size:.875rem;font-weight:600;display:block;margin-bottom:.75rem">Métodos aceitos</label>
+                <div style="display:flex;flex-direction:column;gap:.75rem">
+                  <label class="switch"><input type="checkbox" id="togPix" checked onchange="savePayConfig()"><div class="switch-track"></div> PIX</label>
+                  <label class="switch"><input type="checkbox" id="togDebito" checked onchange="savePayConfig()"><div class="switch-track"></div> Cartão de Débito</label>
+                  <label class="switch"><input type="checkbox" id="togCredito" checked onchange="savePayConfig()"><div class="switch-track"></div> Cartão de Crédito</label>
+                  <label class="switch"><input type="checkbox" id="togOnline" checked onchange="savePayConfig()"><div class="switch-track"></div> Pagamento online com cartão</label>
+                </div>
+              </div>
+              <div style="border-top:1px solid var(--border);padding-top:1.25rem">
+                <label style="font-size:.875rem;font-weight:600;display:block;margin-bottom:.5rem">Taxa de entrega (R$)</label>
+                <div style="display:flex;gap:.75rem">
+                  <input type="number" id="deliveryFeeInput" style="width:140px;padding:.65rem .875rem;border:1px solid var(--border);border-radius:.75rem;font-size:.875rem;outline:none" value="8" min="0"/>
+                  <button class="btn-admin primary" onclick="saveDeliveryFee()">Salvar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONFIGURAÇÕES -->
+        <div class="admin-section" id="sec-configuracoes">
+          <div class="pix-config">
+            <h3>Configurações do Restaurante</h3>
+            <div style="display:grid;gap:1rem">
+              <div class="form-group"><label>Nome do restaurante</label><input type="text" id="cfgName" value="San Remo Pizzaria e Restaurante"/></div>
+              <div class="form-group"><label>Endereço</label><input type="text" id="cfgAddr" value="Rua das Oliveiras, 123 — Vila Bella, São Paulo/SP"/></div>
+              <div class="form-group"><label>WhatsApp</label><input type="text" id="cfgWpp" value="+55 11 98367-3876"/></div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                <div class="form-group"><label>Abertura</label><input type="time" id="cfgOpen" value="18:00"/></div>
+                <div class="form-group"><label>Fechamento</label><input type="time" id="cfgClose" value="23:30"/></div>
+              </div>
+              <div>
+                <label style="font-size:.875rem;font-weight:600;display:block;margin-bottom:.5rem">Dias de funcionamento</label>
+                <div style="display:flex;flex-wrap:wrap;gap:.5rem" id="daysToggles">
+                  <label class="switch"><input type="checkbox" id="d0"><div class="switch-track"></div>Dom</label>
+                  <label class="switch"><input type="checkbox" id="d1"><div class="switch-track"></div>Seg</label>
+                  <label class="switch"><input type="checkbox" id="d2" checked><div class="switch-track"></div>Ter</label>
+                  <label class="switch"><input type="checkbox" id="d3" checked><div class="switch-track"></div>Qua</label>
+                  <label class="switch"><input type="checkbox" id="d4" checked><div class="switch-track"></div>Qui</label>
+                  <label class="switch"><input type="checkbox" id="d5" checked><div class="switch-track"></div>Sex</label>
+                  <label class="switch"><input type="checkbox" id="d6" checked><div class="switch-track"></div>Sáb</label>
+                </div>
+              </div>
+              <div style="margin-top:.5rem">
+                <label style="font-size:.875rem;font-weight:600;display:block;margin-bottom:.5rem">Senha do administrador</label>
+                <div style="display:flex;gap:.75rem">
+                  <input type="password" id="cfgPass" style="flex:1;padding:.65rem .875rem;border:1px solid var(--border);border-radius:.75rem;font-size:.875rem;outline:none" placeholder="Nova senha"/>
+                  <button class="btn-admin ghost" onclick="saveAdminPass()">Alterar</button>
+                </div>
+              </div>
+              <button class="btn-admin primary" style="width:fit-content;margin-top:.5rem" onclick="showToast('Configurações salvas!')">Salvar configurações</button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /admin-content -->
+    </div><!-- /admin-main -->
+  </div><!-- /admin-shell -->
+</div><!-- /page-admin -->
+
+<!-- ADMIN MODALS -->
+<!-- Item modal -->
+<div class="admin-modal-backdrop" id="itemModal">
+  <div class="admin-modal">
+    <button class="modal-close" onclick="closeItemModal()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+    <h3 id="itemModalTitle">Novo item</h3>
+    <input type="hidden" id="editItemId"/>
+    <div class="form-row"><div class="form-group"><label>Nome</label><input type="text" id="iName" placeholder="Ex: Margherita"/></div></div>
+    <div class="form-row cols2">
+      <div class="form-group"><label>Categoria</label>
+        <select id="iCat">
+          <option value="pizzas-classicas">Pizzas Clássicas</option>
+          <option value="pizzas-especiais">Pizzas Especiais</option>
+          <option value="sobremesas">Sobremesas</option>
+          <option value="bebidas">Bebidas</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Preço (R$)</label><input type="number" id="iPrice" placeholder="49.00" step="0.01"/></div>
+    </div>
+    <div class="form-row"><div class="form-group"><label>Descrição</label><textarea id="iDesc" placeholder="Ingredientes e detalhes..."></textarea></div></div>
+    <div class="form-row"><div class="form-group"><label>URL da imagem</label><input type="text" id="iImg" placeholder="https://..."/></div></div>
+    <div class="form-row"><label class="switch"><input type="checkbox" id="iActive" checked><div class="switch-track"></div> Item ativo (visível no cardápio)</label></div>
+    <div class="form-actions">
+      <button class="btn-admin ghost" onclick="closeItemModal()">Cancelar</button>
+      <button class="btn-admin primary" onclick="saveItem()">Salvar item</button>
+    </div>
+  </div>
+</div>
+
+<!-- Promo modal -->
+<div class="admin-modal-backdrop" id="promoModal">
+  <div class="admin-modal">
+    <button class="modal-close" onclick="closePromoModal()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+    <h3>Nova promoção</h3>
+    <div class="form-row"><div class="form-group"><label>Item</label>
+      <select id="promoItem" onchange="fillPromoPrice()"></select>
+    </div></div>
+    <div class="form-row cols2">
+      <div class="form-group"><label>Preço original (R$)</label><input type="number" id="promoOriginal" readonly style="background:var(--admin-bg)"/></div>
+      <div class="form-group"><label>Preço promocional (R$)</label><input type="number" id="promoNew" step="0.01" placeholder=""/></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn-admin ghost" onclick="closePromoModal()">Cancelar</button>
+      <button class="btn-admin primary" onclick="savePromo()">Salvar promoção</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ======== STATE ========
+let adminPass = 'admin123';
+let pixKey = '11.983.673.876-00';
+let deliveryFee = 8;
+let payConfig = {pix:true,debito:true,credito:true,online:true};
+let selectedPay = '';
+let selectedCardWhere = '';
+let orders = [];
+let nextOrderId = 1001;
+let promos = [];
+
+// ======== MENU DATA ========
+let menu = {
+  'pizzas-classicas':[
+    {id:1,name:'Margherita',desc:'Molho de tomate San Marzano, mussarela de búfala, manjericão fresco e azeite extravirgem.',price:49,img:'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=600&q=80',active:true},
+    {id:2,name:'Calabresa Artesanal',desc:'Calabresa fatiada, mussarela, cebola roxa em fatias finas e orégano.',price:52,img:'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80',active:true},
+    {id:3,name:'Napolitana',desc:'Molho de tomate, mussarela, tomates frescos, alho fatiado e orégano.',price:50,img:'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&q=80',active:true},
+    {id:4,name:'Portuguesa',desc:'Presunto, mussarela, ovos, cebola, pimentão e azeitonas.',price:54,img:'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=600&q=80',active:true},
+    {id:5,name:'Frango com Catupiry',desc:'Frango desfiado temperado, mussarela, catupiry cremoso e orégano.',price:56,img:'https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?w=600&q=80',active:true},
+    {id:6,name:'Pepperoni',desc:'Generosas fatias de pepperoni, mussarela e pimenta vermelha.',price:57,img:'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=600&q=80',active:true},
+  ],
+  'pizzas-especiais':[
+    {id:7,name:'Quatro Queijos',desc:'Mussarela, gorgonzola, parmesão e provolone defumado.',price:49,priceOld:58,promo:true,img:'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&q=80',active:true},
+    {id:8,name:'Burrata & Prosciutto',desc:'Base de azeite, burrata fresca, presunto cru italiano e rúcula.',price:74,img:'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=600&q=80',active:true},
+    {id:9,name:'Trufa Negra',desc:'Creme de trufa negra, mussarela de búfala, cogumelos frescos e parmesão.',price:82,img:'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80',active:true},
+    {id:10,name:'Salmão Defumado',desc:'Cream cheese, salmão defumado, alcaparras e limão siciliano.',price:78,img:'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=600&q=80',active:true},
+  ],
+  'sobremesas':[
+    {id:11,name:'Tiramisù',desc:'Sobremesa italiana clássica com mascarpone, café espresso e cacau.',price:22,img:'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=600&q=80',active:true},
+    {id:12,name:'Chocolate com Morango',desc:'Chocolate ao leite derretido com morangos frescos e raspas de chocolate branco.',price:54,img:'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=600&q=80',active:true},
+    {id:13,name:'Panna Cotta',desc:'Panna cotta de baunilha com calda de frutas vermelhas.',price:19,img:'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=600&q=80',active:true},
+  ],
+  'bebidas':[
+    {id:14,name:'Refrigerante Lata',desc:'Coca-Cola, Guaraná Antarctica ou Sprite. 350ml.',price:7,img:'https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=600&q=80',active:true},
+    {id:15,name:'Suco Natural',desc:'Laranja, limão ou maracujá. 500ml.',price:12,img:'https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=600&q=80',active:true},
+    {id:16,name:'Água Mineral',desc:'Com ou sem gás. 500ml.',price:5,img:'https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=600&q=80',active:true},
+    {id:17,name:'Vinho Tinto da Casa',desc:'Taça de vinho tinto italiano da seleção da casa.',price:28,img:'https://images.unsplash.com/photo-1568213816046-0ee1c42bd559?w=600&q=80',active:true},
+  ]
+};
+
+// ======== SEED ORDERS ========
+function seedOrders(){
+  const names=['Ana Lima','Carlos Souza','Mariana Rocha','Pedro Neto','Julia Ferreira'];
+  const pays=['PIX','Débito','Crédito'];
+  const statuses=['pendente','preparo','entrega','entregue'];
+  const allItems = getAllItems();
+  for(let i=0;i<6;i++){
+    const item = allItems[Math.floor(Math.random()*allItems.length)];
+    const qty = Math.ceil(Math.random()*2);
+    const pay = pays[Math.floor(Math.random()*pays.length)];
+    const st = statuses[Math.floor(Math.random()*statuses.length)];
+    orders.push({
+      id:'#'+nextOrderId++,
+      client:names[Math.floor(Math.random()*names.length)],
+      items:[{name:item.name,qty,price:item.price}],
+      total:(item.price*qty)+deliveryFee,
+      pay,status:st,
+      time:new Date(Date.now()-Math.random()*3600000)
+    });
+  }
+}
+
+function getAllItems(){
+  return Object.values(menu).flat();
+}
+
+// ======== CART ========
+let cart=[];
+
+function addToCart(id){
+  const item=findItem(id);if(!item)return;
+  const ex=cart.find(c=>c.id===id);
+  if(ex)ex.qty++;else cart.push({...item,qty:1});
+  renderCart();showToast(`${item.name} adicionado!`);
+}
+
+function findItem(id){
+  for(const c of Object.values(menu)){const f=c.find(i=>i.id===id);if(f)return f;}
+}
+
+function changeQty(id,d){
+  const i=cart.findIndex(c=>c.id===id);if(i===-1)return;
+  cart[i].qty+=d;if(cart[i].qty<=0)cart.splice(i,1);
+  renderCart();
+}
+
+function renderCart(){
+  const empty=document.getElementById('cartEmpty');
+  const items=document.getElementById('cartItems');
+  const footer=document.getElementById('cartFooter');
+  const badge=document.getElementById('cartCountBadge');
+  if(!cart.length){
+    empty.style.display='flex';items.innerHTML='';footer.style.display='none';badge.style.display='none';
+  }else{
+    empty.style.display='none';footer.style.display='block';
+    const sub=cart.reduce((s,c)=>s+c.price*c.qty,0);
+    badge.style.display='inline';badge.textContent=cart.reduce((s,c)=>s+c.qty,0);
+    document.getElementById('cartSubtotal').textContent=fmt(sub);
+    document.getElementById('cartTotal').textContent=fmt(sub+deliveryFee);
+    items.innerHTML=cart.map(c=>`
+      <div class="cart-item">
+        <div class="cart-item-img"><img src="${c.img}" alt="${c.name}" loading="lazy"/></div>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${c.name}</div>
+          <div class="cart-item-price">${fmt(c.price*c.qty)}</div>
+          <div class="cart-item-controls">
+            <button class="qty-btn" onclick="changeQty(${c.id},-1)">−</button>
+            <span class="qty-num">${c.qty}</span>
+            <button class="qty-btn" onclick="changeQty(${c.id},1)">+</button>
+          </div>
+        </div>
+      </div>`).join('');
+  }
+}
+
+function fmt(n){return'R$ '+n.toFixed(2).replace('.',',');}
+function openCart(){document.getElementById('cartDrawer').classList.add('open');document.getElementById('overlay').classList.add('open');}
+function closeCart(){document.getElementById('cartDrawer').classList.remove('open');document.getElementById('overlay').classList.remove('open');}
+
+// ======== PAYMENT ========
+function openPayment(){
+  if(!cart.length){showToast('Adicione itens ao carrinho!');return;}
+  closeCart();
+  // rebuild pay options based on config
+  const opts=document.getElementById('payOptions');
+  opts.innerHTML='';
+  if(payConfig.pix) opts.innerHTML+=payOptHtml('pix','✦','PIX','Transferência instantânea');
+  if(payConfig.debito) opts.innerHTML+=payOptHtml('debito','💳','Cartão de Débito','Pagar na entrega ou online');
+  if(payConfig.credito) opts.innerHTML+=payOptHtml('credito','💳','Cartão de Crédito','Pagar na entrega ou online');
+  document.getElementById('pixKeyDisplay').textContent=pixKey;
+  document.getElementById('detail-pix').classList.remove('show');
+  document.getElementById('detail-card').classList.remove('show');
+  document.getElementById('cardFields').style.display='none';
+  selectedPay='';selectedCardWhere='';
+  document.getElementById('payModal').classList.add('open');
+}
+
+function payOptHtml(val,icon,title,sub){
+  return`<label class="pay-option" onclick="selectPay('${val}',this)"><input type="radio" name="pay" value="${val}"/><div class="pay-option-icon">${icon}</div><div class="pay-option-info"><h4>${title}</h4><p>${sub}</p></div></label>`;
+}
+
+function selectPay(val,el){
+  selectedPay=val;
+  document.querySelectorAll('#payOptions .pay-option').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('detail-pix').classList.toggle('show',val==='pix');
+  const isCard=(val==='debito'||val==='credito');
+  document.getElementById('detail-card').classList.toggle('show',isCard);
+  if(!isCard)document.getElementById('cardFields').style.display='none';
+}
+
+function selectCardPay(val,el){
+  selectedCardWhere=val;
+  document.querySelectorAll('#detail-card .pay-option').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('cardFields').style.display=val==='online'?'grid':'none';
+}
+
+function closePayment(){document.getElementById('payModal').classList.remove('open');}
+
+function copyPix(){
+  navigator.clipboard.writeText(pixKey).catch(()=>{});
+  showToast('Chave PIX copiada!');
+}
+
+function fmtCard(el){
+  let v=el.value.replace(/\D/g,'').slice(0,16);
+  el.value=v.replace(/(.{4})/g,'$1 ').trim();
+}
+
+function confirmOrder(){
+  const rua=document.getElementById('addr-rua').value.trim();
+  if(!rua){showToast('Informe o endereço de entrega.');return;}
+  if(!selectedPay){showToast('Selecione a forma de pagamento.');return;}
+  if((selectedPay==='debito'||selectedPay==='credito')&&!selectedCardWhere){showToast('Escolha como pagar com cartão.');return;}
+
+  const payLabel={'pix':'PIX','debito':'Débito','credito':'Crédito'}[selectedPay];
+  const sub=cart.reduce((s,c)=>s+c.price*c.qty,0);
+  const total=sub+deliveryFee;
+
+  // Add to orders
+  const newOrder={
+    id:'#'+nextOrderId++,
+    client:rua,
+    items:cart.map(c=>({name:c.name,qty:c.qty,price:c.price})),
+    total,pay:payLabel,status:'pendente',
+    time:new Date()
+  };
+  orders.unshift(newOrder);
+
+  if(selectedPay==='pix'){
+    const lines=cart.map(c=>`${c.qty}x ${c.name} — ${fmt(c.price*c.qty)}`).join('%0A');
+    const msg=`Olá! Pedido ${newOrder.id}:%0A%0A${lines}%0A%0ATotal: ${fmt(total)}%0AEndereço: ${rua}%0APagamento: PIX%0A%0AChave PIX: ${pixKey}`;
+    window.open(`https://wa.me/5511983673876?text=${msg}`,'_blank');
+  }
+
+  cart=[];renderCart();closePayment();updateDash();
+  showToast(`Pedido ${newOrder.id} realizado!`);
+}
+
+// ======== NAVIGATION ========
+let currentPage='cardapio';
+function navigate(page){
+  if(page==='admin'){
+    document.getElementById('publicHeader').style.display='none';
+    document.getElementById('publicMain').style.display='none';
+    document.getElementById('publicFooter').style.display='none';
+    document.getElementById('page-admin').classList.add('active');
+    document.getElementById('page-admin').style.display='flex';
+    currentPage='admin';return;
+  }
+  document.getElementById('publicHeader').style.display='';
+  document.getElementById('publicMain').style.display='';
+  document.getElementById('publicFooter').style.display='';
+  document.getElementById('page-admin').classList.remove('active');
+  document.getElementById('page-admin').style.display='none';
+  document.querySelectorAll('#publicMain .page').forEach(p=>p.classList.remove('active'));
+  const t=document.getElementById('page-'+page);if(t)t.classList.add('active');
+  document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('active',a.dataset.page===page));
+  currentPage=page;window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function filterCat(cat,btn){
+  document.querySelectorAll('.cat-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.cat-section').forEach(s=>s.classList.toggle('hidden',cat!=='todas'&&s.dataset.cat!==cat));
+}
+
+// ======== RENDER PUBLIC MENU ========
+function renderMenu(){
+  for(const [cat,items] of Object.entries(menu)){
+    const grid=document.getElementById('grid-'+cat);if(!grid)continue;
+    const active=items.filter(i=>i.active);
+    grid.innerHTML=active.map(item=>{
+      const promo=promos.find(p=>p.itemId===item.id&&p.active);
+      const displayPrice=promo?promo.newPrice:item.price;
+      const displayOld=promo?item.price:item.priceOld;
+      const isPromo=!!promo||item.promo;
+      return`<article class="card">
+        <div class="card-img">
+          <img src="${item.img}" alt="${item.name}" loading="lazy"/>
+          ${isPromo?'<span class="badge-promo">Promoção</span>':''}
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">${item.name}</h3>
+          <p class="card-desc">${item.desc}</p>
+          <div class="card-footer">
+            <div>
+              ${displayOld?'':'<p class="price-label">a partir de</p>'}
+              <div style="display:flex;align-items:baseline;gap:.5rem">
+                <span class="price${isPromo?' promo':''}">${fmt(displayPrice)}</span>
+                ${displayOld?`<span class="price-old">${fmt(displayOld)}</span>`:''}
+              </div>
+            </div>
+            <button class="btn-add" onclick="addToCart(${item.id})">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            </button>
+          </div>
+        </div>
+      </article>`;
+    }).join('');
+  }
+}
+
+// ======== ADMIN AUTH ========
+function doLogin(){
+  const u=document.getElementById('loginUser').value;
+  const p=document.getElementById('loginPass').value;
+  if(u==='admin'&&p===adminPass){
+    document.getElementById('adminLogin').style.display='none';
+    document.getElementById('adminShell').classList.add('visible');
+    updateDash();renderMenuAdmin();renderPromos();renderOrders('todos');
+    document.getElementById('pixKeyInput').value=pixKey;
+  }else{
+    document.getElementById('loginErr').style.display='block';
+  }
+}
+
+function doLogout(){
+  document.getElementById('adminLogin').style.display='flex';
+  document.getElementById('adminShell').classList.remove('visible');
+  document.getElementById('loginPass').value='';
+  document.getElementById('loginErr').style.display='none';
+  navigate('cardapio');
+}
+
+// ======== ADMIN TABS ========
+const tabMeta={
+  dashboard:{title:'Dashboard',sub:'Visão geral do negócio'},
+  pedidos:{title:'Pedidos',sub:'Gerencie todos os pedidos'},
+  'cardapio-admin':{title:'Cardápio',sub:'Adicione e edite itens'},
+  promocoes:{title:'Promoções',sub:'Gerencie ofertas e descontos'},
+  'pagamentos-config':{title:'Pagamentos',sub:'Configure métodos de pagamento e PIX'},
+  configuracoes:{title:'Configurações',sub:'Dados e horários do restaurante'},
+};
+
+function adminTab(key,el){
+  document.querySelectorAll('.admin-nav-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sec-'+key).classList.add('active');
+  const m=tabMeta[key]||{title:key,sub:''};
+  document.getElementById('adminTabTitle').textContent=m.title;
+  document.getElementById('adminTabSub').textContent=m.sub;
+  if(key==='pedidos')renderOrders('todos');
+  if(key==='cardapio-admin')renderMenuAdmin();
+  if(key==='promocoes')renderPromos();
+}
+
+// ======== DASHBOARD ========
+function updateDash(){
+  const today=orders;
+  const fat=today.reduce((s,o)=>s+o.total,0);
+  document.getElementById('dashTotalPedidos').textContent=today.length;
+  document.getElementById('dashFaturamento').textContent=fmt(fat);
+  document.getElementById('dashEmPreparo').textContent=today.filter(o=>o.status==='preparo').length;
+  document.getElementById('dashEntregas').textContent=today.filter(o=>o.status==='entrega').length;
+  const tbody=document.getElementById('dashRecentOrders');
+  tbody.innerHTML=orders.slice(0,5).map(o=>`
+    <tr>
+      <td><strong>${o.id}</strong></td>
+      <td>${o.client}</td>
+      <td>${o.items.map(i=>`${i.qty}x ${i.name}`).join(', ')}</td>
+      <td>${fmt(o.total)}</td>
+      <td>${o.pay}</td>
+      <td>${statusTag(o.status)}</td>
+    </tr>`).join('');
+}
+
+function statusTag(s){
+  const map={pendente:'yellow',preparo:'blue',entrega:'blue',entregue:'green',cancelado:'red'};
+  const lbl={pendente:'Pendente',preparo:'Em preparo',entrega:'Em entrega',entregue:'Entregue',cancelado:'Cancelado'};
+  return`<span class="tag ${map[s]||'gray'}">${lbl[s]||s}</span>`;
+}
+
+// ======== ORDERS ========
+function renderOrders(filter){
+  document.querySelectorAll('#sec-pedidos .cat-tab').forEach(b=>b.classList.remove('active'));
+  const tabs=document.querySelectorAll('#sec-pedidos .cat-tab');
+  tabs.forEach(t=>{if(t.getAttribute('onclick').includes(`'${filter}'`))t.classList.add('active');});
+  const list=document.getElementById('ordersList');
+  const filtered=filter==='todos'?orders:orders.filter(o=>o.status===filter);
+  if(!filtered.length){list.innerHTML='<p style="color:var(--muted);text-align:center;padding:2rem">Nenhum pedido encontrado.</p>';return;}
+  list.innerHTML=filtered.map(o=>`
+    <div class="order-card">
+      <div class="order-card-header">
+        <div>
+          <span class="order-id">${o.id}</span>
+          <span class="order-time" style="margin-left:.75rem">${fmtTime(o.time)}</span>
+        </div>
+        ${statusTag(o.status)}
+      </div>
+      <div class="order-items">${o.items.map(i=>`${i.qty}× ${i.name}`).join(' · ')}</div>
+      <div class="order-footer">
+        <div>
+          <span class="order-total">${fmt(o.total)}</span>
+          <span class="order-pay" style="margin-left:.5rem">via ${o.pay}</span>
+        </div>
+        <div style="display:flex;gap:.5rem;align-items:center">
+          <select class="status-select" onchange="updateOrderStatus('${o.id}',this.value)">
+            <option value="pendente" ${o.status==='pendente'?'selected':''}>Pendente</option>
+            <option value="preparo" ${o.status==='preparo'?'selected':''}>Em preparo</option>
+            <option value="entrega" ${o.status==='entrega'?'selected':''}>Em entrega</option>
+            <option value="entregue" ${o.status==='entregue'?'selected':''}>Entregue</option>
+            <option value="cancelado" ${o.status==='cancelado'?'selected':''}>Cancelado</option>
+          </select>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function filterOrders(f,btn){
+  document.querySelectorAll('#sec-pedidos .cat-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderOrders(f);
+}
+
+function updateOrderStatus(id,status){
+  const o=orders.find(o=>o.id===id);if(o){o.status=status;updateDash();}
+  showToast('Status atualizado!');
+}
+
+function fmtTime(d){
+  if(!d)return'';
+  const h=d.getHours().toString().padStart(2,'0');
+  const m=d.getMinutes().toString().padStart(2,'0');
+  return`${h}:${m}`;
+}
+
+// ======== MENU ADMIN ========
+function renderMenuAdmin(){
+  const tbody=document.getElementById('menuAdminTable');
+  const all=getAllItems();
+  tbody.innerHTML=all.map(item=>`
+    <tr>
+      <td><strong>${item.name}</strong></td>
+      <td>${catLabel(item)}</td>
+      <td>${fmt(item.price)}</td>
+      <td>${item.active?'<span class="tag green">Ativo</span>':'<span class="tag gray">Inativo</span>'}</td>
+      <td style="display:flex;gap:.5rem">
+        <button class="btn-admin ghost" onclick="openItemModal(${item.id})">Editar</button>
+        <button class="btn-admin danger" onclick="toggleItemActive(${item.id})">${item.active?'Desativar':'Ativar'}</button>
+      </td>
+    </tr>`).join('');
+}
+
+function catLabel(item){
+  for(const[k,v] of Object.entries(menu)){if(v.find(i=>i.id===item.id))return{
+    'pizzas-classicas':'Pizzas Clássicas','pizzas-especiais':'Pizzas Especiais','sobremesas':'Sobremesas','bebidas':'Bebidas'
+  }[k]||k;}return'—';
+}
+
+function toggleItemActive(id){
+  for(const items of Object.values(menu)){const i=items.find(x=>x.id===id);if(i){i.active=!i.active;break;}}
+  renderMenuAdmin();renderMenu();showToast('Item atualizado!');
+}
+
+let editItemCat=null;
+function openItemModal(id){
+  document.getElementById('itemModal').classList.add('open');
+  if(id){
+    const item=findItem(id);if(!item)return;
+    document.getElementById('itemModalTitle').textContent='Editar item';
+    document.getElementById('editItemId').value=id;
+    document.getElementById('iName').value=item.name;
+    document.getElementById('iDesc').value=item.desc;
+    document.getElementById('iPrice').value=item.price;
+    document.getElementById('iImg').value=item.img;
+    document.getElementById('iActive').checked=item.active;
+    for(const[k,v] of Object.entries(menu)){if(v.find(i=>i.id===id)){document.getElementById('iCat').value=k;editItemCat=k;break;}}
+  }else{
+    document.getElementById('itemModalTitle').textContent='Novo item';
+    document.getElementById('editItemId').value='';
+    ['iName','iDesc','iImg'].forEach(f=>document.getElementById(f).value='');
+    document.getElementById('iPrice').value='';
+    document.getElementById('iActive').checked=true;
+    editItemCat=null;
+  }
+}
+
+function closeItemModal(){document.getElementById('itemModal').classList.remove('open');}
+
+function saveItem(){
+  const name=document.getElementById('iName').value.trim();
+  const price=parseFloat(document.getElementById('iPrice').value);
+  const desc=document.getElementById('iDesc').value.trim();
+  const img=document.getElementById('iImg').value.trim()||'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=600&q=80';
+  const active=document.getElementById('iActive').checked;
+  const cat=document.getElementById('iCat').value;
+  const editId=parseInt(document.getElementById('editItemId').value);
+  if(!name||!price){showToast('Preencha nome e preço.');return;}
+  if(editId){
+    for(const[k,items] of Object.entries(menu)){
+      const idx=items.findIndex(i=>i.id===editId);
+      if(idx!==-1){
+        const item=items[idx];
+        item.name=name;item.price=price;item.desc=desc;item.img=img;item.active=active;
+        if(k!==cat){items.splice(idx,1);menu[cat].push(item);}
+        break;
+      }
+    }
+  }else{
+    const newId=Date.now();
+    menu[cat].push({id:newId,name,price,desc,img,active});
+  }
+  closeItemModal();renderMenuAdmin();renderMenu();showToast('Item salvo!');
+}
+
+// ======== PROMOS ========
+function renderPromos(){
+  const tbody=document.getElementById('promoTable');
+  if(!promos.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--muted)">Nenhuma promoção cadastrada.</td></tr>';return;}
+  tbody.innerHTML=promos.map((p,idx)=>`
+    <tr>
+      <td><strong>${p.itemName}</strong></td>
+      <td>${fmt(p.origPrice)}</td>
+      <td>${fmt(p.newPrice)}</td>
+      <td><span class="tag green">-${Math.round((1-p.newPrice/p.origPrice)*100)}%</span></td>
+      <td>${p.active?'<span class="tag green">Ativa</span>':'<span class="tag gray">Inativa</span>'}</td>
+      <td style="display:flex;gap:.5rem">
+        <button class="btn-admin ghost" onclick="togglePromo(${idx})">${p.active?'Pausar':'Ativar'}</button>
+        <button class="btn-admin danger" onclick="removePromo(${idx})">Remover</button>
+      </td>
+    </tr>`).join('');
+}
+
+function openPromoModal(){
+  const sel=document.getElementById('promoItem');
+  sel.innerHTML=getAllItems().map(i=>`<option value="${i.id}">${i.name} — ${fmt(i.price)}</option>`).join('');
+  fillPromoPrice();
+  document.getElementById('promoModal').classList.add('open');
+}
+
+function closePromoModal(){document.getElementById('promoModal').classList.remove('open');}
+
+function fillPromoPrice(){
+  const id=parseInt(document.getElementById('promoItem').value);
+  const item=findItem(id);
+  document.getElementById('promoOriginal').value=item?item.price:'';
+  document.getElementById('promoNew').value='';
+}
+
+function savePromo(){
+  const id=parseInt(document.getElementById('promoItem').value);
+  const item=findItem(id);
+  const newP=parseFloat(document.getElementById('promoNew').value);
+  if(!item||!newP||newP>=item.price){showToast('Preço promocional deve ser menor que o original.');return;}
+  promos.push({itemId:id,itemName:item.name,origPrice:item.price,newPrice:newP,active:true});
+  closePromoModal();renderPromos();renderMenu();showToast('Promoção salva!');
+}
+
+function togglePromo(idx){promos[idx].active=!promos[idx].active;renderPromos();renderMenu();showToast('Promoção atualizada!');}
+function removePromo(idx){promos.splice(idx,1);renderPromos();renderMenu();showToast('Promoção removida!');}
+
+// ======== PAY CONFIG ========
+function savePixKey(){
+  pixKey=document.getElementById('pixKeyInput').value.trim()||pixKey;
+  showToast('Chave PIX salva!');
+}
+
+function savePayConfig(){
+  payConfig.pix=document.getElementById('togPix').checked;
+  payConfig.debito=document.getElementById('togDebito').checked;
+  payConfig.credito=document.getElementById('togCredito').checked;
+  payConfig.online=document.getElementById('togOnline').checked;
+  showToast('Configuração salva!');
+}
+
+function saveDeliveryFee(){
+  deliveryFee=parseFloat(document.getElementById('deliveryFeeInput').value)||8;
+  renderCart();showToast('Taxa de entrega salva!');
+}
+
+function saveAdminPass(){
+  const v=document.getElementById('cfgPass').value.trim();
+  if(v.length<4){showToast('Senha muito curta (mínimo 4 caracteres).');return;}
+  adminPass=v;document.getElementById('cfgPass').value='';showToast('Senha alterada com sucesso!');
+}
+
+// ======== TOAST ========
+function showToast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// ======== STATUS ABERTO/FECHADO ========
+function checkStatus(){
+  const now = new Date();
+  const day = now.getDay();
+  const time = now.getHours()*60 + now.getMinutes();
+  const openDays = [0,2,3,4,5,6];
+  const isOpen = openDays.includes(day) && time >= 18*60 && time < 23*60+30;
+  const badge = document.getElementById('statusBadge');
+  const dot   = document.getElementById('statusDot');
+  const text  = document.getElementById('statusText');
+  if(isOpen){
+    badge.style.cssText='display:inline-flex;align-items:center;gap:.5rem;border-radius:9999px;padding:.375rem .75rem;font-size:.75rem;font-weight:500;border:1px solid rgba(22,163,74,.4);background:rgba(22,163,74,.15);color:#15803d';
+    dot.style.background='#16a34a';
+    text.textContent='Aberto agora';
+  } else {
+    badge.style.cssText='display:inline-flex;align-items:center;gap:.5rem;border-radius:9999px;padding:.375rem .75rem;font-size:.75rem;font-weight:500;border:1px solid rgba(220,38,38,.4);background:rgba(220,38,38,.15);color:#dc2626';
+    dot.style.background='#dc2626';
+    text.textContent='Fechado agora';
+  }
+}
+checkStatus();
+setInterval(checkStatus, 60000);
+
+// ======== INIT ========
+function checkStatus(){
+  const now = new Date();
+  const day = now.getDay(); // 0=dom,1=seg,...,6=sab
+  const hour = now.getHours();
+  const min = now.getMinutes();
+  const time = hour * 60 + min;
+  // Ter(2) a Dom(0,6,5,4,3) das 18h às 23h30 — seg fechado
+  const openDays = [0,2,3,4,5,6]; // dom,ter,qua,qui,sex,sab
+  const openTime = 18*60;   // 18:00
+  const closeTime = 23*60+30; // 23:30
+  const isOpen = openDays.includes(day) && time >= openTime && time < closeTime;
+  const badge = document.getElementById('statusBadge');
+  const dot = document.getElementById('statusDot');
+  const text = document.getElementById('statusText');
+  if(isOpen){
+    badge.style.border='1px solid rgba(22,163,74,.4)';
+    badge.style.background='rgba(22,163,74,.15)';
+    badge.style.color='#15803d';
+    dot.style.background='#16a34a';
+    text.textContent='Aberto agora';
+  } else {
+    badge.style.border='1px solid rgba(220,38,38,.4)';
+    badge.style.background='rgba(220,38,38,.15)';
+    badge.style.color='#dc2626';
+    dot.style.background='#dc2626';
+    text.textContent='Fechado agora';
+  }
+}
+checkStatus();
+setInterval(checkStatus, 60000);
+seedOrders();
+renderMenu();
+navigate('cardapio');
+</script>
+</body>
+</html>
